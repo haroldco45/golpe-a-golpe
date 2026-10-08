@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cut">
+<title>Golpe a Golpe</title>
+<meta name="description" content="Distrileco Caucasia · Toda meta que te pongas, sí se puede. Golpe a golpe.">
+<meta name="theme-color" content="#2b2118">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sand:#f6ecd2; --sand2:#efe0b8; --paper:#fbf6e9;
+  --ink:#2b2118; --ink2:#5b4a3a; --muted:#8a7660;
+  --stone:#7d7468; --stone-d:#4f4740;
+  --wood:#b4682f; --gold:#c9932f; --gold-l:#f2c35a;
+  --sky:#a9cbe0; --ok:#2f8a4e;
+  --line:rgba(43,33,24,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,.big{font-family:"Archivo Black",Inter,sans-serif;letter-spacing:-.01em;line-height:1.05}
+img{max-width:100%;display:block}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:20;background:rgba(43,33,24,.94);backdrop-filter:blur(8px);color:#fff}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
+.brand{font-weight:800;font-size:.95rem;letter-spacing:.02em}
+.brand b{color:var(--gold-l)}
+nav a.cta{background:var(--gold);color:var(--ink);text-decoration:none;font-weight:800;font-size:.8rem;padding:8px 14px;border-radius:999px}
+
+/* HERO */
+.hero{background:linear-gradient(180deg,#cfe1ea 0%,var(--sand) 55%,var(--paper) 100%);padding:34px 0 40px;text-align:center}
+.kicker{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);background:rgba(255,255,255,.6);border:1px solid var(--line);padding:6px 12px;border-radius:999px;margin-bottom:16px}
+.hero h1{font-size:clamp(2.4rem,9vw,4.6rem);color:var(--ink)}
+.hero h1 span{color:var(--wood)}
+.hero p.sub{max-width:560px;margin:14px auto 0;color:var(--ink2);font-size:1.05rem}
+.poster{max-width:440px;margin:26px auto 0;border-radius:18px;overflow:hidden;box-shadow:0 24px 50px -18px rgba(43,33,24,.45);border:6px solid #fff;transform:rotate(-1.2deg)}
+.scroll{margin-top:22px;font-size:.85rem;color:var(--muted)}
+
+/* SECTIONS */
+section{padding:56px 0}
+.label{font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--wood);margin-bottom:8px}
+h2{font-size:clamp(1.8rem,6vw,2.8rem);margin-bottom:12px}
+.lead{color:var(--ink2);max-width:620px;font-size:1.02rem}
+
+/* QUOTE */
+.quote{background:var(--ink);color:var(--sand);text-align:center}
+.quote blockquote{font-family:"Archivo Black",sans-serif;font-size:clamp(1.4rem,5vw,2.3rem);line-height:1.2;max-width:760px;margin:0 auto}
+.quote blockquote em{font-style:normal;color:var(--gold-l)}
+.quote cite{display:block;margin-top:16px;font-style:normal;color:#bfae92;font-size:.9rem}
+
+/* LESSONS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:26px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+.card .n{font-family:"Archivo Black",sans-serif;font-size:2.2rem;color:var(--sand2);-webkit-text-stroke:1.5px var(--wood);line-height:1}
+.card h3{font-size:1.1rem;margin:10px 0 6px}
+.card p{color:var(--ink2);font-size:.95rem}
+
+/* GAME */
+.game{background:linear-gradient(180deg,var(--sand) 0%,var(--sand2) 100%)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:24px;box-shadow:0 18px 40px -24px rgba(43,33,24,.4)}
+.setup{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup label{font-size:.78rem;font-weight:700;color:var(--ink2);display:block;margin-bottom:4px}
+.setup input,.setup select{width:100%;font:inherit;font-size:1rem;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink)}
+.setup .full{grid-column:1/-1}
+.arena{position:relative;display:flex;flex-direction:column;align-items:center;margin-top:18px;user-select:none;-webkit-user-select:none}
+.rockbox{position:relative;width:min(300px,78vw);aspect-ratio:1/0.9;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.rockbox svg{width:100%;height:100%;overflow:visible}
+#hammer{transform-origin:78% 8%;transition:transform .09s ease-in}
+.rockbox.hit #hammer{transform:rotate(-26deg)}
+.rockbox.shake{animation:shake .25s}
+@keyframes shake{25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+.crack{stroke:#2b2118;stroke-width:3;fill:none;stroke-linecap:round;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset .5s ease}
+.crack.on{stroke-dashoffset:0}
+.half{transform-box:fill-box;transform-origin:50% 100%;transition:transform .9s cubic-bezier(.2,.9,.3,1.2),opacity .9s}
+.broken .l{transform:translate(-30px,4px) rotate(-12deg)}
+.broken .r{transform:translate(30px,4px) rotate(12deg)}
+.broken .crack{opacity:0}
+.gem{opacity:0;transition:opacity .6s .4s,transform .6s .4s;transform:translateY(10px)}
+.broken .gem{opacity:1;transform:none}
+.chip{position:absolute;width:10px;height:10px;background:var(--stone);border-radius:2px;pointer-events:none}
+.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 14px;text-align:center;min-width:92px}
+.stat b{display:block;font-family:"Archivo Black",sans-serif;font-size:1.5rem;line-height:1.1}
+.stat small{font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.bar{width:100%;height:12px;background:var(--sand);border-radius:999px;overflow:hidden;margin-top:14px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--wood),var(--gold-l));transition:width .4s}
+.msg{min-height:3em;text-align:center;font-weight:700;margin-top:12px;color:var(--ink)}
+.btns{display:flex;gap:10px;margin-top:12px}
+.btn{flex:1;font:inherit;font-weight:800;font-size:1rem;border:0;border-radius:14px;padding:15px;cursor:pointer}
+.btn.main{background:var(--ink);color:var(--gold-l)}
+.btn.main:active{transform:scale(.98)}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink2);flex:0 0 auto;padding:15px 16px}
+.win{display:none;margin-top:14px;background:var(--ink);color:var(--sand);border-radius:16px;padding:18px;text-align:center}
+.win.show{display:block;animation:pop .5s}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+.win h3{font-family:"Archivo Black",sans-serif;font-size:1.6rem;color:var(--gold-l)}
+.hint{font-size:.82rem;color:var(--muted);text-align:center;margin-top:8px}
+
+/* HABITS */
+.habits{list-style:none;margin-top:22px;display:grid;gap:10px}
+.habits li{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;transition:background .2s}
+.habits li .box{flex:0 0 28px;height:28px;border-radius:8px;border:2px solid var(--stone);display:grid;place-items:center;font-weight:900;color:#fff}
+.habits li.done{background:#eef6ef}
+.habits li.done .box{background:var(--ok);border-color:var(--ok)}
+.habits li b{display:block}
+.habits li span{color:var(--ink2);font-size:.9rem}
+
+/* PHRASE */
+.phrase{background:var(--wood);color:#fff;text-align:center}
+.phrase .big{font-size:clamp(1.4rem,5vw,2.1rem);max-width:720px;margin:10px auto 0;min-height:3.6em;display:flex;align-items:center;justify-content:center}
+.phrase .label{color:#ffe2b8}
+.phrase button{margin-top:16px;background:#fff;color:var(--wood);border:0;font:inherit;font-weight:800;padding:12px 20px;border-radius:999px;cursor:pointer}
+
+/* SHARE */
+.share{text-align:center}
+.wa{display:inline-flex;align-items:center;gap:10px;background:#25d366;color:#08311a;text-decoration:none;font-weight:800;padding:16px 24px;border-radius:999px;margin-top:20px;font-size:1.05rem}
+
+footer{background:var(--ink);color:#bfae92;padding:30px 0;font-size:.85rem;text-align:center}
+footer b{color:var(--sand)}
+footer .credit{margin-top:8px;font-size:.75rem;opacity:.75}
+
+@media(max-width:520px){.setup{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <div class="brand">DISTRILECO <b>· GOLPE A GOLPE</b></div>
+  <a class="cta" href="#mimeta">Mi meta</a>
+</div></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Equipo comercial · Distrileco Caucasia</div>
+    <h1>Toda meta<br><span>sí se puede.</span></h1>
+    <p class="sub">Ninguna piedra se rompe con un solo golpe. Se rompe con el golpe de hoy, el de mañana y el de pasado mañana. Así se cumplen las metas en la ruta.</p>
+    <div class="poster"><img src="martillo.jpg" alt="Un martillo rompe una piedra. Frase: el último golpe del martillo rompe la piedra, pero eso no significa que el primero fue inútil; el éxito es el resultado del esfuerzo continuo." width="1077" height="1316"></div>
+    <div class="scroll">↓ Desliza y ponle martillo a tu meta</div>
+  </div>
+</header>
+
+<section class="quote">
+  <div class="wrap">
+    <blockquote>El golpe que rompe la piedra <em>no es el último</em>. Es la suma de <em>todos</em>.</blockquote>
+    <cite>La visita que no compró hoy también está agrietando la piedra.</cite>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">La lección de la piedra</div>
+    <h2>Lo que el martillo le enseña al vendedor</h2>
+    <p class="lead">Cuando un cliente dice "hoy no", parece que el golpe no sirvió. Pero sirvió. La piedra ya no es la misma.</p>
+    <div class="cards">
+      <div class="card"><div class="n">01</div><h3>El primer golpe no es inútil</h3><p>La primera visita abre la puerta. El cliente te conoce, ve el producto y empieza a confiar. Esa grieta no se ve, pero está.</p></div>
+      <div class="card"><div class="n">02</div><h3>La constancia rompe lo que la fuerza no</h3><p>No gana el que golpea más duro un día. Gana el que vuelve cada semana, cumple la frecuencia y no se salta la ruta.</p></div>
+      <div class="card"><div class="n">03</div><h3>El último golpe llega</h3><p>Un día el pedido grande sale, el cliente difícil abre cuenta y la meta del mes se cumple. Ese día fue posible por todos los anteriores.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="game" id="mimeta">
+  <div class="wrap">
+    <div class="label">Tu piedra de este mes</div>
+    <h2>Ponle número a tu meta y empieza a golpear</h2>
+    <p class="lead">Escribe tu meta. Cada vez que hagas una visita, un pedido o una activación, toca la piedra. Mira cómo se agrieta hasta romperse.</p>
+
+    <div class="panel">
+      <div class="setup">
+        <div class="full"><label for="nombre">Tu nombre</label><input id="nombre" placeholder="Ej: Claudia" maxlength="30"></div>
+        <div><label for="tipo">¿Qué vas a contar?</label>
+          <select id="tipo">
+            <option value="pedidos">Pedidos</option>
+            <option value="visitas efectivas">Visitas efectivas</option>
+            <option value="clientes nuevos">Clientes nuevos</option>
+            <option value="cajas vendidas">Cajas vendidas</option>
+            <option value="activaciones">Activaciones</option>
+          </select></div>
+        <div><label for="meta">Mi meta</label><input id="meta" type="number" inputmode="numeric" min="1" max="9999" value="20"></div>
+      </div>
+
+      <div class="arena">
+        <div class="rockbox" id="rock" role="button" aria-label="Golpear la piedra">
+          <svg viewBox="0 0 300 270" aria-hidden="true">
+            <ellipse cx="150" cy="248" rx="128" ry="14" fill="#e4d2a6"/>
+            <g class="gem"><circle cx="150" cy="170" r="30" fill="#f2c35a" opacity=".35"/><text x="150" y="182" text-anchor="middle" font-family="Archivo Black,sans-serif" font-size="34" fill="#c9932f">★</text></g>
+            <g class="half l"><path d="M150 82 C112 80 70 104 52 150 C38 188 52 232 88 244 L150 246 Z" fill="#8a8073" stroke="#4f4740" stroke-width="3"/><path d="M80 150 C95 140 110 148 120 160 M70 200 C88 196 102 206 112 222" stroke="#6a6156" stroke-width="2" fill="none"/></g>
+            <g class="half r"><path d="M150 82 C188 80 230 104 248 150 C262 188 248 232 212 244 L150 246 Z" fill="#7d7468" stroke="#4f4740" stroke-width="3"/><path d="M190 130 C205 140 214 156 216 172 M182 196 C200 200 214 214 220 230" stroke="#5f574d" stroke-width="2" fill="none"/></g>
+            <path class="crack" d="M150 84 L144 112 L156 136 L146 162"/>
+            <path class="crack" d="M146 162 L154 190 L148 218 L150 246"/>
+            <path class="crack" d="M144 112 L118 124 L98 150"/>
+            <path class="crack" d="M156 136 L184 146 L204 170"/>
+            <path class="crack" d="M154 190 L128 204 L96 226"/>
+            <path class="crack" d="M148 218 L178 222 L210 238"/>
+            <g id="hammer">
+              <rect x="186" y="2" width="16" height="120" rx="6" fill="#b4682f" transform="rotate(32 194 62)"/>
+              <rect x="128" y="62" width="64" height="38" rx="4" fill="#6f7680" stroke="#3e434a" stroke-width="3" transform="rotate(32 160 81)"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><b id="sDone">0</b><small>Golpes</small></div>
+          <div class="stat"><b id="sMeta">20</b><small>Meta</small></div>
+          <div class="stat"><b id="sLeft">20</b><small>Faltan</small></div>
+        </div>
+        <div class="bar"><i id="bar"></i></div>
+        <div class="msg" id="msg">Toca la piedra cada vez que sumes uno.</div>
+        <div class="btns" style="width:100%">
+          <button class="btn main" id="hitBtn">🔨 ¡Golpe!</button>
+          <button class="btn ghost" id="undo" title="Deshacer">↶</button>
+          <button class="btn ghost" id="reset" title="Nueva piedra">Nueva</button>
+        </div>
+        <div class="win" id="win" style="width:100%">
+          <h3>¡Rompiste la piedra!</h3>
+          <p id="winTxt">Meta cumplida. Cada golpe valió la pena.</p>
+          <p style="margin-top:10px;font-size:.9rem;color:#bfae92">Ahora ponte una meta más grande. Sí se puede.</p>
+        </div>
+        <p class="hint">Tu avance se guarda en este celular.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">Los golpes de cada día</div>
+    <h2>Checklist de la ruta de hoy</h2>
+    <p class="lead">Cinco golpes que ningún vendedor de Distrileco se salta. Márcalos a medida que los cumplas.</p>
+    <ul class="habits" id="habits">
+      <li data-k="h1"><div class="box"></div><div><b>Salir temprano y completar la ruta</b><span>El cliente que no visitas es el pedido que se lleva otro.</span></div></li>
+      <li data-k="h2"><div class="box"></div><div><b>Ofrecer la promoción del mes en cada tienda</b><span>Aunque creas que no la va a tomar. Ese es el primer golpe.</span></div></li>
+      <li data-k="h3"><div class="box"></div><div><b>Revisar exhibición y rotación</b><span>Producto que se ve, producto que se vende.</span></div></li>
+      <li data-k="h4"><div class="box"></div><div><b>Cobrar a tiempo y con buena cara</b><span>Cartera sana es cliente que vuelve a pedir.</span></div></li>
+      <li data-k="h5"><div class="box"></div><div><b>Volver al "hoy no" de la semana pasada</b><span>Esa piedra ya tiene grietas. Dale otro golpe.</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="phrase">
+  <div class="wrap">
+    <div class="label">Frase para arrancar el día</div>
+    <div class="big" id="phrase">Un "no" hoy es una grieta para el "sí" de mañana.</div>
+    <button id="nextP">Otra frase →</button>
+  </div>
+</section>
+
+<section class="share">
+  <div class="wrap">
+    <div class="label">Pásala al equipo</div>
+    <h2>Que todo el equipo la tenga</h2>
+    <p class="lead" style="margin:0 auto">Compártela por WhatsApp con tus compañeros de ruta. Golpe a golpe, todos llegamos.</p>
+    <a class="wa" id="wa" href="#" target="_blank" rel="noopener">💬 Compartir por WhatsApp</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>Distrileco Caucasia S.A.S.</b> · Gerencia Comercial<br>
+    Bajo Cauca · Córdoba · Nordeste · Urabá · Sucre
+    <div class="credit">Imagen motivacional con su marca de agua original (LB). App hecha por Vibras Positivas HM.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var KEY='golpeAGolpe.v1';
+  var st={nombre:'',tipo:'pedidos',meta:20,done:0,habits:{},hday:''};
+  try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)st=Object.assign(st,s);}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+
+  // Fecha real de Colombia (UTC-5)
+  function hoyCO(){var d=new Date(Date.now()-5*3600*1000);return d.toISOString().slice(0,10);}
+  if(st.hday!==hoyCO()){st.habits={};st.hday=hoyCO();save();}
+
+  var $=function(id){return document.getElementById(id)};
+  var rock=$('rock'),cracks=[].slice.call(document.querySelectorAll('.crack'));
+  $('nombre').value=st.nombre;$('tipo').value=st.tipo;$('meta').value=st.meta;
+
+  var msgs=[
+    'Primer golpe dado. Ya empezaste, que es lo más difícil.',
+    'La piedra ya sintió el martillo. Sigue.',
+    'Las grietas no se ven todavía, pero están ahí.',
+    'Vas en serio. La piedra lo sabe.',
+    'Mitad del camino. Ahora es cuesta abajo.',
+    'Ya se oye crujir. No aflojes.',
+    'Faltan poquitos. Cada golpe pesa más ahora.',
+    '¡Un golpe más y se rompe!'
+  ];
+
+  function render(){
+    var meta=Math.max(1,st.meta|0),done=Math.min(st.done,meta),p=done/meta;
+    $('sDone').textContent=done;$('sMeta').textContent=meta;$('sLeft').textContent=Math.max(0,meta-done);
+    $('bar').style.width=(p*100)+'%';
+    var n=Math.floor(p*cracks.length+0.0001);
+    cracks.forEach(function(c,i){c.classList.toggle('on',i<n)});
+    var broken=done>=meta;
+    rock.classList.toggle('broken',broken);
+    $('win').classList.toggle('show',broken);
+    var who=st.nombre?st.nombre.trim():'';
+    if(broken){$('winTxt').textContent=(who?who+', ':'')+'cumpliste '+meta+' '+st.tipo+'. Cada golpe valió la pena.';$('msg').textContent='🏆 ¡Meta cumplida!';}
+    else if(done===0){$('msg').textContent=(who?who+', ':'')+'toca la piedra cada vez que sumes uno.';}
+    else{
+      var left=meta-done;
+      $('msg').textContent=(left===1?msgs[7]:msgs[Math.min(6,Math.floor(p*7))])+' Faltan '+left+' '+st.tipo+'.';
+    }
+  }
+
+  function chips(){
+    var r=rock.getBoundingClientRect();
+    for(var i=0;i<7;i++){
+      var c=document.createElement('div');c.className='chip';
+      c.style.left=(r.width*0.5)+'px';c.style.top=(r.height*0.35)+'px';
+      rock.appendChild(c);
+      var dx=(Math.random()-.5)*220,dy=-40-Math.random()*90,rot=Math.random()*360;
+      c.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:'translate('+dx+'px,'+(dy+160)+'px) rotate('+rot+'deg)',opacity:0}],{duration:700+Math.random()*300,easing:'cubic-bezier(.2,.7,.4,1)'});
+      setTimeout(function(el){return function(){el.remove()}}(c),1100);
+    }
+  }
+
+  function hit(){
+    if(st.done>=st.meta)return;
+    st.done++;save();
+    rock.classList.add('hit');setTimeout(function(){rock.classList.remove('hit');rock.classList.add('shake');setTimeout(function(){rock.classList.remove('shake')},260)},90);
+    chips();
+    if(navigator.vibrate)navigator.vibrate(st.done>=st.meta?[80,60,160]:30);
+    render();
+  }
+  rock.addEventListener('click',hit);
+  $('hitBtn').addEventListener('click',hit);
+  $('undo').addEventListener('click',function(){if(st.done>0){st.done--;save();render();}});
+  $('reset').addEventListener('click',function(){if(confirm('¿Empezar una piedra nueva? Tus golpes vuelven a cero.')){st.done=0;save();render();}});
+  $('nombre').addEventListener('input',function(e){st.nombre=e.target.value;save();render();});
+  $('tipo').addEventListener('change',function(e){st.tipo=e.target.value;save();render();});
+  $('meta').addEventListener('input',function(e){var v=parseInt(e.target.value,10);if(v>0){st.meta=Math.min(9999,v);save();render();}});
+
+  // Hábitos del día
+  [].forEach.call(document.querySelectorAll('#habits li'),function(li){
+    var k=li.dataset.k,box=li.querySelector('.box');
+    function upd(){li.classList.toggle('done',!!st.habits[k]);box.textContent=st.habits[k]?'✓':'';}
+    li.addEventListener('click',function(){st.habits[k]=!st.habits[k];save();upd();});
+    upd();
+  });
+
+  // Frases
+  var P=[
+    'Un "no" hoy es una grieta para el "sí" de mañana.',
+    'La meta no se cumple el último día del mes. Se cumple todos los días.',
+    'No cuentes los "no". Cuenta los golpes.',
+    'El cliente difícil también es una piedra. Y toda piedra se rompe.',
+    'Hoy no tienes que romperla. Solo tienes que golpearla.',
+    'Disciplina es volver a la tienda que ayer te dijo que no.',
+    'La ruta completa vale más que el pedido perfecto.',
+    'Si te pusiste la meta, es porque puedes con ella.',
+    'Nadie recuerda el primer golpe. Pero sin él no hay último.',
+    'Esfuerzo continuo: ese es todo el secreto.'
+  ];
+  var pi=new Date(Date.now()-5*3600*1000).getUTCDate()%P.length;
+  $('phrase').textContent=P[pi];
+  $('nextP').addEventListener('click',function(){pi=(pi+1)%P.length;$('phrase').textContent=P[pi];});
+
+  // WhatsApp
+  $('wa').href='https://wa.me/?text='+encodeURIComponent('🔨 Equipo Distrileco: toda meta que nos pongamos, SÍ SE PUEDE. Golpe a golpe se rompe la piedra. Ponle número a tu meta aquí 👉 '+location.href.split('#')[0]);
+
+  render();
+
+  if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
+})();
+</script>
+</body>
+</html>
